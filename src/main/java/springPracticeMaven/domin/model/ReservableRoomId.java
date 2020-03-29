@@ -3,6 +3,7 @@ package springPracticeMaven.domin.model;
 import java.io.Serializable;
 import java.time.LocalDate;
 
+import javax.persistence.Column;
 import javax.persistence.Embeddable;
 
 import lombok.AllArgsConstructor;
@@ -15,7 +16,7 @@ import lombok.Setter;
 @AllArgsConstructor
 @NoArgsConstructor
 @Embeddable
-public class ReservedRoomId implements Serializable {
+public class ReservableRoomId implements Serializable {
 
 	/**
 	 * 
@@ -24,6 +25,7 @@ public class ReservedRoomId implements Serializable {
 
 	private Integer roomId;
 
+	@Column(name = "reserved_date", columnDefinition = "DATE")
 	private LocalDate reservedDate;
 
 	@Override
@@ -46,7 +48,7 @@ public class ReservedRoomId implements Serializable {
 		if (getClass() != obj.getClass()) {
 			return false;
 		}
-		ReservedRoomId other = (ReservedRoomId) obj;
+		ReservableRoomId other = (ReservableRoomId) obj;
 		if (reservedDate == null) {
 			if (other.reservedDate != null) {
 				return false;

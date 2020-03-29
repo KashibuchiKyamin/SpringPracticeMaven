@@ -24,14 +24,14 @@ public class ReservableRoom implements Serializable {
 	private static final long serialVersionUID = 7424239620329824230L;
 
 	@EmbeddedId
-	private ReservedRoomId reservedRoomId;
+	private ReservableRoomId reservedRoomId;
 
 	@ManyToOne
-	@JoinColumn(name = "roomId", insertable = false, updatable = false)
+	@JoinColumn(name = "room_id", insertable = false, updatable = false)
 	@MapsId("roomId")
 	private MeetingRoom meetingRoom;
 
-	public ReservableRoom(ReservedRoomId reservedRoomId) {
+	public ReservableRoom(ReservableRoomId reservedRoomId) {
 		this.reservedRoomId = reservedRoomId;
 	}
 

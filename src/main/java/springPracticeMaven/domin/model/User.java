@@ -12,7 +12,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 @Entity
-@Table(name = "user")
+@Table(name = "usr")
 @Getter
 @Setter
 public class User implements Serializable {
@@ -32,6 +32,6 @@ public class User implements Serializable {
 	private String lastName;
 
 	@Enumerated(EnumType.STRING)
-	private RoleName rolename;
+	private RoleName roleName;
 
 }
