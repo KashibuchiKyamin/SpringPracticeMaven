@@ -1,8 +1,9 @@
 package springPracticeMaven.domin.model;
 
 import java.io.Serializable;
-import java.time.LocalDate;
+import java.time.LocalTime;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -28,9 +29,11 @@ public class Reservation implements Serializable {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer reservationId;
 
-	private LocalDate startTime;
+	@Column(name = "start_time", columnDefinition = "TIME")
+	private LocalTime startTime;
 
-	private LocalDate endTime;
+	@Column(name = "end_time", columnDefinition = "TIME")
+	private LocalTime endTime;
 
 	@ManyToOne
 	@JoinColumns({ @JoinColumn(name = "reserved_date"), @JoinColumn(name = "room_id") })
