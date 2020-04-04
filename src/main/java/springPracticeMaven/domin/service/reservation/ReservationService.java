@@ -55,7 +55,7 @@ public class ReservationService {
 				.anyMatch(x -> x.overlap(reservation));
 
 		if (overlap) {
-			throw new AlreadyReservedException("入力の時間代はすでに予約済です。");
+			throw new AlreadyReservedException("入力の時間帯はすでに予約済です。");
 		}
 		reservationRepository.save(reservation);
 		return reservation;
