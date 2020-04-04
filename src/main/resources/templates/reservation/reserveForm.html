@@ -9,8 +9,10 @@
 		<a th:text="@{'/rooms/' + ${date}}">会議室一覧へ</a>
 	</div>
 
+	<p style="color: red" th:if="${error != null}" th:text="${error}"></p>
+
 	<form th:object="${reservationForm}"
-			th:action="@{'/reservation/' + ${date} + '/' + ${roomId}}" method="post">
+			th:action="@{'/reservations/' + ${date} + '/' + ${roomId}}" method="post">
 		会議室:<span th:text="${room.roomId}">豊洲</span>
 		<br />
 		予約者名:<span th:text="${user.lastName} + ' ' + ${user.firstName}">山田 小太郎</span>

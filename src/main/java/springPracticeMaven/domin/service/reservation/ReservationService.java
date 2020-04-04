@@ -68,7 +68,7 @@ public class ReservationService {
 	 */
 	public void cancel(Integer reservationId, User requestUser) {
 		Reservation reservation = reservationRepository.findById(reservationId)
-				.orElseThrow(() -> new NonExistentReservationException("対象の予約は存在しません。"));
+				.orElseThrow(() -> new IllegalStateException("対象の予約は存在しません。"));
 		if (RoleName.ADMIN != requestUser.getRoleName() && 
 				!Objects.equals(reservation.getUser().getRoleName(), requestUser.getRoleName())) {
 			throw new IllegalStateException("要求されたキャンセルは許可できません");
