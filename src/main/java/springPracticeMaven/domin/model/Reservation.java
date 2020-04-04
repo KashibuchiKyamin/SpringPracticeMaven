@@ -2,6 +2,7 @@ package springPracticeMaven.domin.model;
 
 import java.io.Serializable;
 import java.time.LocalTime;
+import java.util.Objects;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -15,6 +16,10 @@ import javax.persistence.ManyToOne;
 import lombok.Getter;
 import lombok.Setter;
 
+/**
+ * 予約クラス.
+ *
+ */
 @Entity
 @Getter
 @Setter
@@ -42,4 +47,19 @@ public class Reservation implements Serializable {
 	@ManyToOne
 	@JoinColumn(name = "user_id")
 	private User user;
+
+	/**
+	 * 予約日時の重複判定
+	 * @param target
+	 * @return 重複していた場合trueを返す
+	 */
+	public boolean overlap(Reservation target) {
+		if (!Objects.equals(reservableRoom.getReservableRoomId(), target.getReservableRoom().getReservableRoomId())) {
+			return false;
+		}
+		if (startTime.equals(target.getStartTime()) && endTime.equals(target.getEndTime())) {
+			return true;
+		}
+		return target.getEndTime().isAfter(startTime) && endTime.isAfter(target.getStartTime());
+	}
 }
