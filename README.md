@@ -1,7 +1,7 @@
 # SpringPracticeMaven
 Spring徹底入門 #14 チュートリアルを参照して作業
 
-# バージョン
+## バージョン
 - AdoptOpenJDK 11
 - Spring Boot 2
     - Spring Data JPA 2
