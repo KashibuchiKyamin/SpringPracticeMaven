@@ -26,3 +26,24 @@ spring.jpa.open-in-view=true
 
 ### SQL文
 - ```ALTER TABLE```でForeign keyを指定するのが面倒臭かったため、書籍と書き方を変更
+
+### DI方法について
+- コンストラクタインジェクションで記述する
+```
+public class Aaaa {
+    @Autowired
+    Bbbb bbbb;
+}
+```
+ではなく
+```
+public class Aaaa {
+    private Bbbb bbbb;
+
+    @Autowired
+    public void setBbbb(Bbbb bbbb) {
+        this.bbbb = bbbb;
+    }
+}
+```
+Lombokの```@AllArgsConstructor```も併用する
