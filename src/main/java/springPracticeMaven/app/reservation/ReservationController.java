@@ -6,8 +6,6 @@ import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -36,8 +34,6 @@ import springPracticeMaven.domin.service.room.RoomService;
 @AllArgsConstructor
 public class ReservationController {
 
-	private static final Logger logger = LoggerFactory.getLogger(ReservationController.class); 
-	
 	RoomService roomService;
 
 	ReservationService reservationService;
@@ -86,7 +82,6 @@ public class ReservationController {
 			@DateTimeFormat(iso = DateTimeFormat.ISO.DATE) @PathVariable("date") LocalDate date,
 			@PathVariable("roomId") Integer roomId, Model model) {
 		if (bindingResult.hasErrors()) {
-			logger.debug("追加ログ" + bindingResult.getFieldErrors().toString());
 			return reserveForm(date, roomId, model);
 		}
 
@@ -114,12 +109,12 @@ public class ReservationController {
 		User user = dummyUser();
 		try {
 			reservationService.cancel(reservationId, user);
-			
-		}catch (IllegalStateException e) {
+
+		} catch (IllegalStateException e) {
 			model.addAttribute("error", e.getMessage());
 			return reserveForm(date, roomId, model);
 		}
-		
+
 		return "redirect:/reservations/{date}/{roomId}";
 
 	}
