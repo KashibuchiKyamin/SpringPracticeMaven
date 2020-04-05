@@ -2,7 +2,6 @@ package springPracticeMaven.domin.service.reservation;
 
 import java.util.List;
 import java.util.Objects;
-import java.util.Optional;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -31,7 +30,7 @@ public class ReservationService {
 	/**
 	 * 予約検索
 	 * 
-	 * @param reservableRoomId　- 検索対象の予約ID
+	 * @param reservableRoomId - 検索対象の予約ID
 	 * @return 予約リスト
 	 */
 	public List<Reservation> findReservations(ReservableRoomId reservableRoomId) {
@@ -47,8 +46,10 @@ public class ReservationService {
 	public Reservation reserve(Reservation reservation) {
 		ReservableRoomId reservableRoomId = reservation.getReservableRoom().getReservableRoomId();
 
-		Optional<ReservableRoom> reservable = reservableRoomRepository.findById(reservableRoomId);
-		reservable.orElseThrow(() -> new UnavailableReservationException("入力の日付・部屋の組み合わせは予約できません。"));
+		ReservableRoom reservable = reservableRoomRepository.findOneForUpdateByReservableRoomId(reservableRoomId);
+		if (reservable == null) {
+			throw new UnavailableReservationException("入力の日付・部屋の組み合わせは予約できません。");
+		}
 
 		boolean overlap = reservationRepository
 				.findByReservableRoom_ReservableRoomIdOrderByStartTimeAsc(reservableRoomId).stream()
@@ -63,14 +64,15 @@ public class ReservationService {
 
 	/**
 	 * 予約キャンセルメソッド
+	 * 
 	 * @param reservationId - キャンセル対象の予約ID
-	 * @param requestUser - キャンセル処理を行うユーザ
+	 * @param requestUser   - キャンセル処理を行うユーザ
 	 */
 	public void cancel(Integer reservationId, User requestUser) {
 		Reservation reservation = reservationRepository.findById(reservationId)
 				.orElseThrow(() -> new IllegalStateException("対象の予約は存在しません。"));
-		if (RoleName.ADMIN != requestUser.getRoleName() && 
-				!Objects.equals(reservation.getUser().getRoleName(), requestUser.getRoleName())) {
+		if (RoleName.ADMIN != requestUser.getRoleName()
+				&& !Objects.equals(reservation.getUser().getRoleName(), requestUser.getRoleName())) {
 			throw new IllegalStateException("要求されたキャンセルは許可できません");
 		}
 		reservationRepository.delete(reservation);
