@@ -47,3 +47,13 @@ public class Aaaa {
 }
 ```
 Lombokの```@AllArgsConstructor```も併用する
+
+### Failed to refresh live data from process nnnn の対応
+- pom.xmlに以下の内容を追加  
+  参考:https://github.com/spring-projects/sts4/wiki/Live-Application-Information#application-requirements-for-spring-boot-projects
+```
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-actuator</artifactId>
+		</dependency>
+```
