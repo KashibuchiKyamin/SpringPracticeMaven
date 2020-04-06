@@ -48,6 +48,8 @@ INSERT INTO reservable_room (reserved_date, room_id) VALUES (CURRENT_DATE - 1, 8
 -- ダミーユーザ(password = demo)
 INSERT INTO usr (user_id, first_name, last_name, password, role_name)
 VALUES ('taro-yamada', '太郎', '山田', '$2a$10$oxSJI.keBwxmsMLkcT9lPeAIxfNTPNQxpeywMrF7A3kVszwUTqfTK', 'USER');
+INSERT INTO usr (user_id, first_name, last_name, password, role_name)
+VALUES ('aaaa', 'aaa太郎', 'aaa', '$2a$10$oxSJI.keBwxmsMLkcT9lPeAIxfNTPNQxpeywMrF7A3kVszwUTqfTK', 'USER');
 
 INSERT INTO usr (user_id, first_name, last_name, password, role_name)
 VALUES ('Admin', 'Admin', 'Admin', '$2a$10$oxSJI.keBwxmsMLkcT9lPeAIxfNTPNQxpeywMrF7A3kVszwUTqfTK', 'ADMIN');
