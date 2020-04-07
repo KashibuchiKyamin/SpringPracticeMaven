@@ -12,7 +12,6 @@
 	<artifactId>springPracticeMaven</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<name>SpringPracticeMaven</name>
-	<description>Demo project for Spring Boot</description>
 
 	<properties>
 		<java.version>11</java.version>
@@ -80,4 +79,10 @@
 		</plugins>
 	</build>
 
+	<description>Spring 徹底入門#14チュートリアルを以下の内容で作成
+- SpringBoot2以上
+    - Thymeleaf 3
+    - Spring Data JPA 2
+- Lombok使用
+- Java 11</description>
 </project>
