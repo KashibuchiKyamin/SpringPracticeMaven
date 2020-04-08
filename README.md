@@ -57,3 +57,10 @@ Lombokの```@AllArgsConstructor```も併用する
 			<artifactId>spring-boot-starter-actuator</artifactId>
 		</dependency>
 ```
+
+### CrudRepositoryのメソッドの戻り値が変更
+- findOne()メソッドが使用できなかったり、  
+  替わりにfindById()を使用したら戻り値がOptionalなので処理を書籍と変える必要がある。
+
+### thymeleaf-extra-java8timeはdependencyに追加不要
+- 現在のThymeleafには内包されているので追加不要
