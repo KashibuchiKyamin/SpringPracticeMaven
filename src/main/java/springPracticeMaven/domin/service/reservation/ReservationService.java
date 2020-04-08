@@ -4,6 +4,8 @@ import java.util.List;
 import java.util.Objects;
 
 import org.springframework.security.access.AccessDeniedException;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -64,7 +66,7 @@ public class ReservationService {
 	}
 
 	/**
-	 * 予約キャンセルメソッド
+	 * 予約キャンセルメソッド.
 	 * 
 	 * @param reservationId - キャンセル対象の予約ID
 	 * @param requestUser   - キャンセル処理を行うユーザ
@@ -78,4 +80,20 @@ public class ReservationService {
 		}
 		reservationRepository.delete(reservation);
 	}
+
+	/**
+	 * 予約キャンセルメソッド.
+	 * 
+	 * @param reservation キャンセル対象の予約
+	 */
+	@PreAuthorize(value = "hasRole('ADMIN') or #reservation.user.userId == principal.user.userId")
+	public void cancel(@P("reservation") Reservation reservation) {
+		reservationRepository.delete(reservation);
+	}
+	
+	public Reservation findById(Integer reservationId) {
+		return reservationRepository.findById(reservationId).orElseThrow(() -> new IllegalStateException("対象の予約は存在しません。"));
+	}
+	
+	
 }

@@ -24,7 +24,6 @@ import lombok.AllArgsConstructor;
 import springPracticeMaven.domin.model.ReservableRoom;
 import springPracticeMaven.domin.model.ReservableRoomId;
 import springPracticeMaven.domin.model.Reservation;
-import springPracticeMaven.domin.model.User;
 import springPracticeMaven.domin.service.reservation.AlreadyReservedException;
 import springPracticeMaven.domin.service.reservation.ReservationService;
 import springPracticeMaven.domin.service.reservation.UnavailableReservationException;
@@ -127,14 +126,13 @@ public class ReservationController {
 	 * @return 予約画面にリダイレクトする
 	 */
 	@PostMapping(params = "cancel")
-	public String cancel(@AuthenticationPrincipal ReservationUserDetails userDetails,
-			@RequestParam("reservationId") Integer reservationId, @PathVariable("roomId") Integer roomId,
+	public String cancel(@RequestParam("reservationId") Integer reservationId, @PathVariable("roomId") Integer roomId,
 			@DateTimeFormat(iso = DateTimeFormat.ISO.DATE) @PathVariable("date") LocalDate date, Model model) {
-		User user = userDetails.getUser();
 		try {
-			reservationService.cancel(reservationId, user);
+			Reservation reservation = reservationService.findById(reservationId);
+			reservationService.cancel(reservation);
 
-		} catch (AccessDeniedException e) {
+		} catch (IllegalStateException | AccessDeniedException e) {
 			model.addAttribute("error", e.getMessage());
 			return reserveForm(date, roomId, model);
 		}
