@@ -7,6 +7,8 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.security.access.AccessDeniedException;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -22,17 +24,21 @@ import lombok.AllArgsConstructor;
 import springPracticeMaven.domin.model.ReservableRoom;
 import springPracticeMaven.domin.model.ReservableRoomId;
 import springPracticeMaven.domin.model.Reservation;
-import springPracticeMaven.domin.model.RoleName;
 import springPracticeMaven.domin.model.User;
 import springPracticeMaven.domin.service.reservation.AlreadyReservedException;
 import springPracticeMaven.domin.service.reservation.ReservationService;
 import springPracticeMaven.domin.service.reservation.UnavailableReservationException;
 import springPracticeMaven.domin.service.room.RoomService;
+import springPracticeMaven.domin.service.user.ReservationUserDetails;
 
 @Controller
 @RequestMapping("reservations/{date}/{roomId}")
 @AllArgsConstructor
 public class ReservationController {
+
+	// @AllArgsConstructor 
+	// で全フィールドに対する初期化値を引数にとるコンストラクタを生成し、コンストラクタインジェクションとする。
+	// また、Spring 4.3から、クラス内にコンストラクタがただ1つしかない場合は、 @Autowired が省略可能
 
 	RoomService roomService;
 
@@ -49,6 +55,14 @@ public class ReservationController {
 		return form;
 	}
 
+	/**
+	 * 予約画面表示.
+	 * 
+	 * @param date   - 予約日
+	 * @param roomId - 会議室ID
+	 * @param model  - viewにセットするModel
+	 * @return
+	 */
 	@GetMapping
 	String reserveForm(@DateTimeFormat(iso = DateTimeFormat.ISO.DATE) @PathVariable("date") LocalDate date,
 			@PathVariable("roomId") Integer roomId, Model model) {
@@ -61,8 +75,6 @@ public class ReservationController {
 		model.addAttribute("room", roomService.findMeetingRoom(roomId));
 		model.addAttribute("reservations", reservations);
 		model.addAttribute("timeList", timeList);
-		model.addAttribute("user", dummyUser());
-
 		return "reservation/reserveForm";
 
 	}
@@ -70,15 +82,16 @@ public class ReservationController {
 	/**
 	 * 予約処理.
 	 * 
-	 * @param form
-	 * @param bindingResult
-	 * @param date
-	 * @param roomId
-	 * @param model
-	 * @return
+	 * @param form          - 予約情報のForm
+	 * @param bindingResult - Formのバリデーション情報
+	 * @param date          - 日付
+	 * @param roomId        - 会議室ID
+	 * @param model         - viewにセットするModel
+	 * @return 予約画面にリダイレクトする
 	 */
 	@PostMapping
 	public String reserve(@Validated ReservationForm form, BindingResult bindingResult,
+			@AuthenticationPrincipal ReservationUserDetails userDetails,
 			@DateTimeFormat(iso = DateTimeFormat.ISO.DATE) @PathVariable("date") LocalDate date,
 			@PathVariable("roomId") Integer roomId, Model model) {
 		if (bindingResult.hasErrors()) {
@@ -91,7 +104,7 @@ public class ReservationController {
 		reservation.setStartTime(form.getStartTime());
 		reservation.setEndTime(form.getEndTime());
 		reservation.setReservableRoom(reservableRoom);
-		reservation.setUser(dummyUser());
+		reservation.setUser(userDetails.getUser());
 
 		try {
 			reservationService.reserve(reservation);
@@ -103,14 +116,25 @@ public class ReservationController {
 		return "redirect:/reservations/{date}/{roomId}";
 	}
 
+	/**
+	 * 予約キャンセル.
+	 * 
+	 * @param userDetails   - ログインしたユーザの情報
+	 * @param reservationId - 予約ID
+	 * @param roomId        - 会議室ID
+	 * @param date          - 日付
+	 * @param model         - viewにセットするModel
+	 * @return 予約画面にリダイレクトする
+	 */
 	@PostMapping(params = "cancel")
-	public String cancel(@RequestParam("reservationId") Integer reservationId, @PathVariable("roomId") Integer roomId,
+	public String cancel(@AuthenticationPrincipal ReservationUserDetails userDetails,
+			@RequestParam("reservationId") Integer reservationId, @PathVariable("roomId") Integer roomId,
 			@DateTimeFormat(iso = DateTimeFormat.ISO.DATE) @PathVariable("date") LocalDate date, Model model) {
-		User user = dummyUser();
+		User user = userDetails.getUser();
 		try {
 			reservationService.cancel(reservationId, user);
 
-		} catch (IllegalStateException e) {
+		} catch (AccessDeniedException e) {
 			model.addAttribute("error", e.getMessage());
 			return reserveForm(date, roomId, model);
 		}
@@ -119,14 +143,4 @@ public class ReservationController {
 
 	}
 
-	private User dummyUser() {
-		User user = new User();
-
-		user.setUserId("taro-yamada");
-		user.setFirstName("太郎");
-		user.setLastName("山田");
-		user.setRoleName(RoleName.USER);
-
-		return user;
-	}
 }

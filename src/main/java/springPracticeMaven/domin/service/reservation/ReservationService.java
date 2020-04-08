@@ -3,6 +3,7 @@ package springPracticeMaven.domin.service.reservation;
 import java.util.List;
 import java.util.Objects;
 
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -73,7 +74,7 @@ public class ReservationService {
 				.orElseThrow(() -> new IllegalStateException("対象の予約は存在しません。"));
 		if (RoleName.ADMIN != requestUser.getRoleName()
 				&& !Objects.equals(reservation.getUser().getRoleName(), requestUser.getRoleName())) {
-			throw new IllegalStateException("要求されたキャンセルは許可できません");
+			throw new AccessDeniedException("要求されたキャンセルは許可できません");
 		}
 		reservationRepository.delete(reservation);
 	}
