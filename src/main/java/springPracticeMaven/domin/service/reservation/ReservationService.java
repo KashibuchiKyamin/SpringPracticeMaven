@@ -9,7 +9,7 @@ import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import springPracticeMaven.domin.model.ReservableRoom;
 import springPracticeMaven.domin.model.ReservableRoomId;
 import springPracticeMaven.domin.model.Reservation;
@@ -23,12 +23,12 @@ import springPracticeMaven.domin.repository.room.ReservableRoomRepository;
  */
 @Service
 @Transactional
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class ReservationService {
 
-	ReservationRepository reservationRepository;
+	private final ReservationRepository reservationRepository;
 
-	ReservableRoomRepository reservableRoomRepository;
+	private final ReservableRoomRepository reservableRoomRepository;
 
 	/**
 	 * 予約検索

@@ -20,7 +20,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import springPracticeMaven.domin.model.ReservableRoom;
 import springPracticeMaven.domin.model.ReservableRoomId;
 import springPracticeMaven.domin.model.Reservation;
@@ -32,16 +32,16 @@ import springPracticeMaven.domin.service.user.ReservationUserDetails;
 
 @Controller
 @RequestMapping("reservations/{date}/{roomId}")
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class ReservationController {
 
-	// @AllArgsConstructor 
+	// @RequiredArgsConstructor 
 	// で全フィールドに対する初期化値を引数にとるコンストラクタを生成し、コンストラクタインジェクションとする。
 	// また、Spring 4.3から、クラス内にコンストラクタがただ1つしかない場合は、 @Autowired が省略可能
 
-	RoomService roomService;
+	private final RoomService roomService;
 
-	ReservationService reservationService;
+	private final ReservationService reservationService;
 
 	@ModelAttribute
 	ReservationForm setUpForm() {

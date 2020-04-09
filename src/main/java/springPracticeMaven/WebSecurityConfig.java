@@ -10,16 +10,16 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import springPracticeMaven.domin.service.user.ReservationUserDetailsService;
 
 @Configuration
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(prePostEnabled = true)
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
-	ReservationUserDetailsService userDetailsService;
+	private final ReservationUserDetailsService userDetailsService;
 
 	@Bean
 	PasswordEncoder passwordEncoder() {

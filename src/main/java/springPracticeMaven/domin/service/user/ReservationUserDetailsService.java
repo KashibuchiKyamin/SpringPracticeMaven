@@ -5,15 +5,15 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import springPracticeMaven.domin.model.User;
 import springPracticeMaven.domin.repository.user.UserRepository;
 
-@AllArgsConstructor
+@RequiredArgsConstructor
 @Service
 public class ReservationUserDetailsService implements UserDetailsService {
 
-	UserRepository userRepository;
+	private final UserRepository userRepository;
 
 	@Override
 	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {

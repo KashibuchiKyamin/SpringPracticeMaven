@@ -6,11 +6,11 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 import springPracticeMaven.domin.model.User;
 
-@AllArgsConstructor
+@RequiredArgsConstructor
 @Getter
 public class ReservationUserDetails implements UserDetails {
 

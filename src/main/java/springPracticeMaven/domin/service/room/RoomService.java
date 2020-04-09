@@ -6,7 +6,7 @@ import java.util.List;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import springPracticeMaven.domin.model.MeetingRoom;
 import springPracticeMaven.domin.model.ReservableRoom;
 import springPracticeMaven.domin.repository.room.MeetingRoomRepository;
@@ -14,12 +14,12 @@ import springPracticeMaven.domin.repository.room.ReservableRoomRepository;
 
 @Service
 @Transactional
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class RoomService {
 
-	ReservableRoomRepository reservableRoomRepository;
+	private final ReservableRoomRepository reservableRoomRepository;
 
-	MeetingRoomRepository meetingRoomRepository;
+	private final MeetingRoomRepository meetingRoomRepository;
 
 	/**
 	 * 指定日に予約可能な会議室の一覧取得.
